@@ -1,0 +1,63 @@
+<%- include('partials/header') %>
+<%- include('partials/tontine-nav') %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h6 class="fw-bold mb-0">Litiges</h6>
+  <button class="btn btn-sm btn-brand" data-bs-toggle="modal" data-bs-target="#newDispute">Signaler un litige</button>
+</div>
+
+<% if (disputes.length === 0) { %>
+  <p class="text-muted small">Aucun litige signalé.</p>
+<% } %>
+
+<% disputes.forEach(d => { %>
+  <div class="card border-0 shadow-sm mb-2">
+    <div class="card-body">
+      <div class="d-flex justify-content-between">
+        <strong><%= d.subject %></strong>
+        <span class="badge status-<%= d.status %>"><%= d.status %></span>
+      </div>
+      <p class="small mb-1">Signalé par <%= d.first_name %> <%= d.last_name %> le <%= d.created_at %></p>
+      <p class="small mb-1"><%= d.description %></p>
+      <% if (d.resolution_note) { %><p class="small text-muted mb-1">Résolution : <%= d.resolution_note %></p><% } %>
+
+      <% if (membership.role === 'admin' && d.status !== 'resolved' && d.status !== 'rejected') { %>
+      <form method="POST" action="/tontines/<%= tontine.id %>/disputes/<%= d.id %>/resolve" class="row g-2 mt-2">
+        <div class="col-md-5">
+          <select name="status" class="form-select form-select-sm">
+            <option value="in_progress">En cours</option>
+            <option value="resolved">Résolu</option>
+            <option value="rejected">Rejeté</option>
+          </select>
+        </div>
+        <div class="col-md-5">
+          <input type="text" name="resolution_note" class="form-control form-control-sm" placeholder="Note de résolution">
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-sm btn-outline-brand w-100">Mettre à jour</button>
+        </div>
+      </form>
+      <% } %>
+    </div>
+  </div>
+<% }) %>
+
+<div class="modal fade" id="newDispute" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="/tontines/<%= tontine.id %>/disputes/new">
+        <div class="modal-header"><h6 class="modal-title">Signaler un litige</h6></div>
+        <div class="modal-body">
+          <div class="mb-2"><label class="form-label small">Sujet</label><input type="text" name="subject" class="form-control" required></div>
+          <div class="mb-2"><label class="form-label small">Description</label><textarea name="description" class="form-control" rows="3"></textarea></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <button class="btn btn-sm btn-brand">Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

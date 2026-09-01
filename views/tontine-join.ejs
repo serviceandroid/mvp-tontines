@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <h4 class="fw-bold text-brand mb-3">Rejoindre une tontine</h4>
+        <% if (error) { %><div class="alert alert-danger py-2 small"><%= error %></div><% } %>
+        <form method="POST" action="/tontines/join">
+          <label class="form-label">Code d'invitation</label>
+          <input type="text" name="invite_code" class="form-control mb-3 text-uppercase" placeholder="EX: A1B2C3" required>
+          <button class="btn btn-brand w-100">Rejoindre</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>

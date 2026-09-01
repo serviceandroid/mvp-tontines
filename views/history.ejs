@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+<%- include('partials/tontine-nav') %>
+
+<h6 class="fw-bold mb-3">Historique complet</h6>
+<div class="table-responsive">
+<table class="table table-sm bg-white shadow-sm">
+  <thead><tr><th>Cycle</th><th>Membre</th><th>Attendu</th><th>Payé</th><th>Date</th><th>Statut</th></tr></thead>
+  <tbody>
+  <% contributions.forEach(c => { %>
+    <tr>
+      <td><%= c.cycle_number %></td>
+      <td><%= c.first_name %> <%= c.last_name %></td>
+      <td><%= c.expected_amount %> <%= tontine.currency %></td>
+      <td><%= c.paid_amount %> <%= tontine.currency %></td>
+      <td><%= c.payment_date || '—' %></td>
+      <td><span class="badge status-<%= c.status %>"><%= c.status %></span></td>
+    </tr>
+  <% }) %>
+  </tbody>
+</table>
+</div>
+
+<%- include('partials/footer') %>

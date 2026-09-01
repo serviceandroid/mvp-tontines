@@ -1,0 +1,107 @@
+<%- include('partials/header') %>
+<%- include('partials/tontine-nav') %>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center py-3"><div class="fw-bold fs-4"><%= activeMembersCount %></div><div class="small text-muted">Membres actifs</div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center py-3"><div class="fw-bold fs-4"><%= paymentRate %>%</div><div class="small text-muted">Taux de paiement</div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center py-3"><div class="fw-bold fs-4 text-danger"><%= membersInDefault %></div><div class="small text-muted">Membres en défaut</div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card border-0 shadow-sm text-center py-3"><div class="fw-bold fs-4 text-warning"><%= openDisputes %></div><div class="small text-muted">Litiges ouverts</div></div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold mb-0">Cycles</h6>
+          <% if (membership.role === 'admin' && cycles.length === 0) { %>
+            <form method="POST" action="/tontines/<%= tontine.id %>/draw">
+              <button class="btn btn-sm btn-brand">🎲 Lancer le tirage au sort</button>
+            </form>
+          <% } %>
+        </div>
+        <% if (cycles.length === 0) { %>
+          <p class="text-muted small">Aucun cycle généré. L'administrateur doit lancer le tirage au sort pour démarrer la tontine.</p>
+        <% } else { %>
+        <table class="table table-sm align-middle">
+          <thead><tr><th>#</th><th>Échéance</th><th>Bénéficiaire</th><th>Collecté</th><th>Statut</th><th></th></tr></thead>
+          <tbody>
+          <% cycles.forEach(c => { %>
+            <tr>
+              <td><%= c.cycle_number %></td>
+              <td><%= c.due_date %></td>
+              <td><%= c.ben_first ? c.ben_first + ' ' + c.ben_last : '—' %></td>
+              <td><%= c.collected_amount %> / <%= c.expected_amount %> <%= tontine.currency %></td>
+              <td><span class="badge status-<%= c.status %>"><%= c.status %></span></td>
+              <td>
+                <a class="btn btn-xs btn-outline-brand btn-sm" href="/tontines/<%= tontine.id %>/cycles/<%= c.id %>/contributions">Cotisations</a>
+                <% if ((membership.role === 'admin' || membership.role === 'treasurer') && c.status !== 'closed' && c.beneficiary_member_id) { %>
+                <form method="POST" action="/tontines/<%= tontine.id %>/cycles/<%= c.id %>/payout/confirm" class="d-inline">
+                  <button class="btn btn-sm btn-outline-success">Confirmer remise du pot</button>
+                </form>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+          </tbody>
+        </table>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold mb-0">Membres</h6>
+          <% if (membership.role === 'admin') { %>
+            <span class="small text-muted">Code d'invitation : <strong><%= tontine.invite_code %></strong></span>
+          <% } %>
+        </div>
+        <ul class="list-group list-group-flush">
+          <% members.forEach(m => { %>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <div>
+                <strong><%= m.first_name %> <%= m.last_name %></strong>
+                <span class="badge bg-light text-dark border"><%= m.role %></span>
+                <div class="small"><span class="badge status-<%= m.status %>"><%= m.status %></span></div>
+              </div>
+              <% if (membership.role === 'admin' && m.role !== 'admin') { %>
+              <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">Gérer</button>
+                <ul class="dropdown-menu dropdown-menu-end small">
+                  <li>
+                    <form method="POST" action="/tontines/<%= tontine.id %>/members/<%= m.id %>/role" class="px-3 py-1">
+                      <input type="hidden" name="role" value="<%= m.role === 'treasurer' ? 'member' : 'treasurer' %>">
+                      <button class="btn btn-link btn-sm p-0"><%= m.role === 'treasurer' ? 'Retirer le rôle Trésorier' : 'Nommer Trésorier' %></button>
+                    </form>
+                  </li>
+                  <% if (m.status !== 'excluded') { %>
+                  <li>
+                    <form method="POST" action="/tontines/<%= tontine.id %>/members/<%= m.id %>/exclude" class="px-3 py-1" onsubmit="return confirm('Confirmer l\'exclusion ?');">
+                      <input type="text" name="reason" placeholder="Motif" class="form-control form-control-sm mb-1" required>
+                      <button class="btn btn-sm btn-outline-danger w-100">Exclure</button>
+                    </form>
+                  </li>
+                  <% } %>
+                </ul>
+              </div>
+              <% } %>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

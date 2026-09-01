@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm border-0 mt-4">
+      <div class="card-body p-4">
+        <h4 class="mb-1 fw-bold text-brand">Connexion</h4>
+        <p class="text-muted small mb-3">Recevez un code par SMS pour vous connecter</p>
+        <% if (error) { %><div class="alert alert-danger py-2 small"><%= error %></div><% } %>
+        <form method="POST" action="/login">
+          <div class="mb-3">
+            <label class="form-label">Téléphone</label>
+            <input type="tel" name="phone" class="form-control" placeholder="+228 90 00 00 00" required>
+          </div>
+          <button class="btn btn-brand w-100">Recevoir le code OTP</button>
+        </form>
+        <p class="text-center small mt-3 mb-0">Pas encore de compte ? <a href="/register">Inscrivez-vous</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>

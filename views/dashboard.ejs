@@ -1,0 +1,59 @@
+<%- include('partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="fw-bold text-brand mb-0">Mes tontines</h4>
+  <div>
+    <a href="/tontines/join" class="btn btn-outline-brand btn-sm me-2">Rejoindre</a>
+    <a href="/tontines/new" class="btn btn-brand btn-sm">+ Créer une tontine</a>
+  </div>
+</div>
+
+<% if (notifications.length) { %>
+<div class="card mb-4 border-0 shadow-sm">
+  <div class="card-body">
+    <h6 class="fw-bold">🔔 Notifications récentes</h6>
+    <ul class="list-unstyled small mb-0">
+      <% notifications.forEach(n => { %>
+        <li class="py-1 border-bottom">
+          <strong><%= n.title %></strong> — <%= n.body %>
+          <span class="text-muted"> · <%= n.created_at %></span>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+</div>
+<% } %>
+
+<% if (tontines.length === 0) { %>
+  <div class="alert alert-light border text-center py-5">
+    <p class="mb-3">Vous ne faites encore partie d'aucune tontine.</p>
+    <a href="/tontines/new" class="btn btn-brand me-2">Créer ma première tontine</a>
+    <a href="/tontines/join" class="btn btn-outline-brand">Rejoindre avec un code</a>
+  </div>
+<% } %>
+
+<div class="row g-3">
+  <% tontines.forEach(t => { %>
+  <div class="col-md-6 col-lg-4">
+    <a href="/tontines/<%= t.id %>" class="text-decoration-none">
+      <div class="card h-100 shadow-sm border-0 tontine-card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <h5 class="card-title fw-bold"><%= t.name %></h5>
+            <span class="badge bg-secondary"><%= t.my_role %></span>
+          </div>
+          <p class="text-muted small mb-2"><%= t.members_count %> membre(s) · <%= t.amount %> <%= t.currency %> / <%= t.frequency === 'weekly' ? 'semaine' : 'mois' %></p>
+          <% if (t.nextCycle) { %>
+            <p class="small mb-0">Cycle <%= t.nextCycle.cycle_number %> · échéance <%= t.nextCycle.due_date %></p>
+            <p class="small mb-0">Bénéficiaire : <%= t.nextCycle.first_name ? t.nextCycle.first_name + ' ' + t.nextCycle.last_name : 'à tirer au sort' %></p>
+          <% } else { %>
+            <p class="small mb-0 text-muted">Tirage au sort non encore effectué</p>
+          <% } %>
+        </div>
+      </div>
+    </a>
+  </div>
+  <% }) %>
+</div>
+
+<%- include('partials/footer') %>

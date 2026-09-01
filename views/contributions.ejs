@@ -1,0 +1,63 @@
+<%- include('partials/header') %>
+<%- include('partials/tontine-nav') %>
+
+<h6 class="fw-bold mb-3">Cotisations — Cycle <%= cycle.cycle_number %> (échéance <%= cycle.due_date %>)</h6>
+<% if (tontine.proof_threshold > 0) { %>
+  <div class="alert alert-info small py-2">Une preuve de paiement est obligatoire à partir de <%= tontine.proof_threshold %> <%= tontine.currency %>.</div>
+<% } %>
+
+<div class="table-responsive">
+<table class="table align-middle bg-white shadow-sm">
+  <thead><tr><th>Membre</th><th>Attendu</th><th>Payé</th><th>Date</th><th>Moyen</th><th>Preuve</th><th>Statut</th><% if (membership.role === 'admin' || membership.role === 'treasurer') { %><th>Action</th><% } %></tr></thead>
+  <tbody>
+  <% contributions.forEach(c => { %>
+    <tr>
+      <td><%= c.first_name %> <%= c.last_name %></td>
+      <td><%= c.expected_amount %> <%= tontine.currency %></td>
+      <td><%= c.paid_amount %> <%= tontine.currency %></td>
+      <td><%= c.payment_date || '—' %></td>
+      <td><%= c.payment_method || '—' %></td>
+      <td><% if (c.proof_path) { %><a href="<%= c.proof_path %>" target="_blank">Voir</a><% } else { %>—<% } %></td>
+      <td><span class="badge status-<%= c.status %>"><%= c.status %></span></td>
+      <% if (membership.role === 'admin' || membership.role === 'treasurer') { %>
+      <td>
+        <button class="btn btn-sm btn-outline-brand" data-bs-toggle="modal" data-bs-target="#modal-<%= c.id %>">Enregistrer</button>
+      </td>
+      <% } %>
+    </tr>
+
+    <% if (membership.role === 'admin' || membership.role === 'treasurer') { %>
+    <div class="modal fade" id="modal-<%= c.id %>" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form method="POST" action="/tontines/<%= tontine.id %>/contributions/<%= c.id %>/record" enctype="multipart/form-data">
+            <div class="modal-header"><h6 class="modal-title">Enregistrer la cotisation — <%= c.first_name %></h6></div>
+            <div class="modal-body">
+              <div class="mb-2"><label class="form-label small">Montant payé</label><input type="number" step="1" name="paid_amount" class="form-control" value="<%= c.expected_amount %>" required></div>
+              <div class="mb-2"><label class="form-label small">Date de paiement</label><input type="date" name="payment_date" class="form-control" required></div>
+              <div class="mb-2">
+                <label class="form-label small">Moyen de paiement</label>
+                <select name="payment_method" class="form-select">
+                  <option value="mobile_money">Mobile Money</option>
+                  <option value="especes">Espèces</option>
+                  <option value="virement">Virement</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+              <div class="mb-2"><label class="form-label small">Preuve (photo/reçu)</label><input type="file" name="proof" class="form-control" accept="image/*,application/pdf"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button class="btn btn-sm btn-brand">Valider</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  <% }) %>
+  </tbody>
+</table>
+</div>
+
+<%- include('partials/footer') %>

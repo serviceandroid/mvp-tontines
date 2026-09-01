@@ -1,0 +1,70 @@
+<%- include('partials/header') %>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <h4 class="fw-bold text-brand mb-3">Créer une tontine</h4>
+        <% if (error) { %><div class="alert alert-danger py-2 small"><%= error %></div><% } %>
+        <form method="POST" action="/tontines/new">
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label">Nom de la tontine</label>
+              <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Montant de cotisation (FCFA)</label>
+              <input type="number" step="1" name="amount" class="form-control" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="2"></textarea>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Fréquence</label>
+              <select name="frequency" class="form-select" required>
+                <option value="weekly">Hebdomadaire</option>
+                <option value="monthly" selected>Mensuelle</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Date de début</label>
+              <input type="date" name="start_date" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Nombre de cycles</label>
+              <input type="number" name="num_cycles" class="form-control" min="1" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Nombre maximal de membres</label>
+              <input type="number" name="max_members" class="form-control" min="2" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Mode de rotation</label>
+              <select name="rotation_mode" class="form-select" required>
+                <option value="random_draw">Tirage au sort aléatoire</option>
+                <option value="fixed_order">Ordre d'inscription</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Seuil de preuve de paiement obligatoire (FCFA)</label>
+              <input type="number" name="proof_threshold" class="form-control" value="0" min="0">
+              <div class="form-text">0 = jamais obligatoire. Une preuve reste toujours recommandée en dessous du seuil.</div>
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="double_validation" id="dv">
+                <label class="form-check-label" for="dv">Activer la double validation (Admin + Trésorier) pour la remise du pot</label>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Règles (visibles par tous les membres)</label>
+              <textarea name="rules" class="form-control" rows="3" placeholder="Ex : cotisation due avant le 5 de chaque mois, preuve obligatoire au-delà de X FCFA..."></textarea>
+            </div>
+          </div>
+          <button class="btn btn-brand mt-4">Créer la tontine</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>

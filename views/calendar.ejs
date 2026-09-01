@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+<%- include('partials/tontine-nav') %>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-body">
+    <h6 class="fw-bold mb-3">Calendrier des bénéficiaires</h6>
+    <% if (cycles.length === 0) { %>
+      <p class="text-muted small">Le tirage au sort n'a pas encore été effectué.</p>
+    <% } else { %>
+    <div class="timeline">
+      <% cycles.forEach(c => { %>
+        <div class="timeline-item">
+          <div class="timeline-dot status-<%= c.status %>"></div>
+          <div>
+            <strong>Cycle <%= c.cycle_number %></strong> — <%= c.due_date %><br>
+            <span class="small">Bénéficiaire : <%= c.ben_first ? c.ben_first + ' ' + c.ben_last : 'à déterminer' %></span><br>
+            <span class="badge status-<%= c.status %>"><%= c.status %></span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

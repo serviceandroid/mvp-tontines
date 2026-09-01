@@ -1,0 +1,41 @@
+:root {
+  --brand: #1F7A4D;
+  --brand-dark: #14512F;
+}
+body {
+  background-color: #F7F9F8;
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.text-brand { color: var(--brand); }
+.app-navbar { background-color: var(--brand); }
+.btn-brand {
+  background-color: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+}
+.btn-brand:hover { background-color: var(--brand-dark); color: #fff; }
+.btn-outline-brand {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+.btn-outline-brand:hover { background-color: var(--brand); color: #fff; }
+.tontine-card { transition: transform .1s ease; }
+.tontine-card:hover { transform: translateY(-2px); }
+
+.badge.status-active, .badge.status-paid, .badge.status-resolved, .badge.status-closed, .badge.status-payout_confirmed_admin, .badge.status-payout_confirmed_treasurer {
+  background-color: #DFF3E6; color: #1F7A4D;
+}
+.badge.status-pending, .badge.status-open, .badge.status-collecting, .badge.status-ready_for_payout {
+  background-color: #FFF3CD; color: #7A5B10;
+}
+.badge.status-late, .badge.status-in_progress {
+  background-color: #FDE6C8; color: #9A5B10;
+}
+.badge.status-default, .badge.status-excluded, .badge.status-disputed, .badge.status-rejected, .badge.status-suspended {
+  background-color: #FBE0E0; color: #A5302F;
+}
+
+.timeline { position: relative; padding-left: 24px; }
+.timeline-item { position: relative; padding-bottom: 24px; padding-left: 16px; border-left: 2px solid #E0E0E0; }
+.timeline-item:last-child { border-left: 2px solid transparent; }
+.timeline-dot { position: absolute; left: -8px; top: 0; width: 14px; height: 14px; border-radius: 50%; background: #1F7A4D; }

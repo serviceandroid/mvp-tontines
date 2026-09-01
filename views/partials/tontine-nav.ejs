@@ -1,0 +1,14 @@
+<div class="mb-4">
+  <h3 class="mb-1"><%= tontine.name %> <span class="badge bg-secondary align-middle" style="font-size:0.5em;"><%= membership.role %></span></h3>
+  <p class="text-muted mb-2"><%= tontine.description %></p>
+  <ul class="nav nav-pills small">
+    <li class="nav-item"><a class="nav-link <%= path === '/tontines/'+tontine.id ? 'active' : '' %>" href="/tontines/<%= tontine.id %>">Vue d'ensemble</a></li>
+    <li class="nav-item"><a class="nav-link <%= path.includes('/calendar') ? 'active' : '' %>" href="/tontines/<%= tontine.id %>/calendar">Calendrier</a></li>
+    <li class="nav-item"><a class="nav-link <%= path.includes('/history') ? 'active' : '' %>" href="/tontines/<%= tontine.id %>/history">Historique</a></li>
+    <li class="nav-item"><a class="nav-link <%= path.includes('/disputes') ? 'active' : '' %>" href="/tontines/<%= tontine.id %>/disputes">Litiges</a></li>
+    <% if (membership.role === 'admin' || membership.role === 'treasurer') { %>
+    <li class="nav-item"><a class="nav-link <%= path.includes('/audit') ? 'active' : '' %>" href="/tontines/<%= tontine.id %>/audit">Journal d'audit</a></li>
+    <% } %>
+    <li class="nav-item"><a class="nav-link <%= path.includes('/report') ? 'active' : '' %>" href="/tontines/<%= tontine.id %>/report" target="_blank">Rapport</a></li>
+  </ul>
+</div>

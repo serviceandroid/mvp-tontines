@@ -1,0 +1,48 @@
+<%- include('partials/header') %>
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm border-0 mt-4">
+      <div class="card-body p-4">
+        <h4 class="mb-1 fw-bold text-brand">Créer un compte</h4>
+        <p class="text-muted small mb-3">Le cahier numérique sécurisé de la tontine</p>
+        <% if (error) { %><div class="alert alert-danger py-2 small"><%= error %></div><% } %>
+        <form method="POST" action="/register">
+          <div class="mb-3">
+            <label class="form-label">Prénom</label>
+            <input type="text" name="first_name" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nom</label>
+            <input type="text" name="last_name" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Téléphone</label>
+            <input type="tel" name="phone" class="form-control" placeholder="+228 90 00 00 00" required>
+          </div>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="consent" id="consent" required>
+            <label class="form-check-label small" for="consent">
+              J'accepte la <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">politique de confidentialité</a> et le traitement de mes données personnelles et financières.
+            </label>
+          </div>
+          <button class="btn btn-brand w-100">S'inscrire</button>
+        </form>
+        <p class="text-center small mt-3 mb-0">Déjà inscrit ? <a href="/login">Connectez-vous</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="privacyModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Politique de confidentialité (résumé)</h5></div>
+      <div class="modal-body small">
+        <p>Vos données (identité, téléphone, historique de cotisations) sont utilisées uniquement pour le fonctionnement de vos tontines. Votre numéro complet n'est jamais visible par les autres membres — seule une version masquée l'est.</p>
+        <p>Vous pouvez demander la suppression de votre compte à tout moment depuis vos paramètres.</p>
+      </div>
+      <div class="modal-footer"><button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fermer</button></div>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') %>
